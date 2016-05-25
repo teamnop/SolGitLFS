@@ -10,7 +10,7 @@ namespace SolGitLFS.Apis
 {
     public class HTTPApi
     {
-        public static async Task<Structs.HttpBatchResponse> DownloadQuery(string baseUrl, List<Entities.LFSObject> objects)
+        public static async Task<Structs.HttpBatchResponse> DownloadQueryAsync(string baseUrl, List<Entities.LFSObject> objects)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -48,9 +48,29 @@ namespace SolGitLFS.Apis
             }
         }
 
-        public void Download(string url)
+        public static async Task<byte[]> DownloadAsync(string url, Dictionary<string, string> headers = null)
         {
+            using (HttpClient client = new HttpClient())
+            {
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                    {
+                        if (header.Key.ToLower().Equals("authorization"))
+                        {
+                            client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse(header.Value);
+                        }
+                        else
+                        {
+                            client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                        }
+                    }
+                }
 
+                var response = await client.GetAsync(url);
+
+                return await response.Content.ReadAsByteArrayAsync();
+            }
         }
     }
 }
