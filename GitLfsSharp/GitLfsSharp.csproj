@@ -7,7 +7,7 @@
     <ProjectGuid>{88CC121D-E3C3-4B62-95BE-8BF03F9A877E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GitLfsSharp</RootNamespace>
+    <RootNamespace>GitLFSSharp</RootNamespace>
     <AssemblyName>git-lfs-sharp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
