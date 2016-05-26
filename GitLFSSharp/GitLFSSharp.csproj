@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CommandHolder.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\SmudgeCommand.cs" />
+    <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
