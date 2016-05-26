@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolGitLFS.Apis.Structs
 {
-    class HttpBatchRequestObject : Entities.LFSObject
+    class HttpBatchRequestObject : Entities.LFSPointer
     {
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolGitLFS.Apis.Structs
 {
-    public class HttpBatchResponseObject : Entities.LFSObject
+    public class HttpBatchResponseObject : Entities.LFSPointer
     {
         public HttpBatchResponseError error { get; set; }
         public HttpBatchResponseActions actions { get; set; }

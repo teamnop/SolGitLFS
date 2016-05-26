@@ -57,13 +57,13 @@
   <ItemGroup>
     <Compile Include="Apis\HTTPApi.cs" />
     <Compile Include="Apis\Structs\HttpBatchRequest.cs" />
-    <Compile Include="Apis\Structs\HttpBatchRequestObject.cs" />
+    <Compile Include="Apis\Structs\HttpBatchRequestPointer.cs" />
     <Compile Include="Apis\Structs\HttpBatchResponse.cs" />
     <Compile Include="Apis\Structs\HttpBatchResponseAction.cs" />
     <Compile Include="Apis\Structs\HttpBatchResponseActions.cs" />
     <Compile Include="Apis\Structs\HttpBatchResponseError.cs" />
-    <Compile Include="Apis\Structs\HttpBatchResponseObject.cs" />
-    <Compile Include="Entities\LFSObject.cs" />
+    <Compile Include="Apis\Structs\HttpBatchResponsePointer.cs" />
+    <Compile Include="Entities\LFSPointer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
