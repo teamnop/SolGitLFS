@@ -45,12 +45,21 @@ namespace GitLFSSharp.Commands
                 {
                     // redirect stdin to stdout
                     byte[] buffer = new byte[8196];
+
                     using (var stdout = Console.OpenStandardOutput())
                     {
                         stdout.Write(inputBuf, 0, cnt);
 
-                        int readBytes = stdin.Read(buffer, 0, buffer.Length);
-                        stdout.Write(buffer, 0, readBytes);
+                        while (true)
+                        {
+                            int readBytes = stdin.Read(buffer, 0, buffer.Length);
+                            if (readBytes <= 0)
+                            {
+                                break;
+                            }
+
+                            stdout.Write(buffer, 0, readBytes);
+                        }
                     }
                 }
             }
