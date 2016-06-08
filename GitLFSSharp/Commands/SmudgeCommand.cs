@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ namespace GitLFSSharp.Commands
     {
         public int Run(string[] args)
         {
+            // 우선 "version " 으로 시작 되는지 체크한다
+            // 위의 문자열로 시작 하지 않는다면 그냥 무시하고 그대로 stdout으로 출력한다
+
             const int BOMLength = 3;
             byte[] versionByteArray = Encoding.UTF8.GetBytes("version ");
             byte[] versionWithBOM = new byte[versionByteArray.Length + BOMLength]; // add BOM length
@@ -39,7 +43,57 @@ namespace GitLFSSharp.Commands
                 if (inputBuf.SequenceEqual(versionWithBOM) == true ||
                     inputBuf.Take(versionByteArray.Length).SequenceEqual(versionByteArray) == true)
                 {
-                    Console.WriteLine("hello world");
+                    Dictionary<string, string> inputParams = new Dictionary<string, string>();
+
+                    // 처리하기 쉽게 하기 위해 모든 내용을 memory로 읽어드리고 파싱한다
+                    byte[] buffer = new byte[8196];
+
+                    using (var ms = new MemoryStream())
+                    {
+                        ms.Write(inputBuf, 0, cnt);
+
+                        while (true)
+                        {
+                            int readBytes = stdin.Read(buffer, 0, buffer.Length);
+                            if (readBytes <= 0)
+                            {
+                                break;
+                            }
+
+                            ms.Write(buffer, 0, readBytes);
+                        }
+
+                        var inputString = Encoding.UTF8.GetString(ms.ToArray());
+                        using (var reader = new StringReader(inputString))
+                        {
+                            while (true)
+                            {
+                                var row = reader.ReadLine();
+                                if (row == null)
+                                {
+                                    break;
+                                }
+
+                                var splitIndex = row.IndexOf(' ');
+                                if (splitIndex < 0)
+                                {
+                                    throw new Exception("올바른 LFS 파일이 아닙니다");
+                                }
+
+                                var key = row.Substring(0, splitIndex);
+                                var value = row.Substring(splitIndex + 1);
+
+                                inputParams.Add(key, value);
+                            }
+                        }
+                    }
+                    foreach (var element in inputParams)
+                    {
+                        Console.WriteLine(element.Key);
+                        Console.WriteLine(element.Value);
+                        Console.WriteLine("---------");
+                    }
+
                 }
                 else
                 {
