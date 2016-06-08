@@ -64,7 +64,6 @@
     <Compile Include="Apis\Structs\HttpBatchResponseError.cs" />
     <Compile Include="Apis\Structs\HttpBatchResponseObject.cs" />
     <Compile Include="Entities\LFSPointer.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
