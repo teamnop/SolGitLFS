@@ -87,13 +87,38 @@ namespace GitLFSSharp.Commands
                             }
                         }
                     }
-                    foreach (var element in inputParams)
+
+                    // 파일 파싱이 끝났으면 실제파일을 받아와서 stdout으로 보내준다
+                    var lfsObject = new SolGitLFS.Entities.LFSPointer()
                     {
-                        Console.WriteLine(element.Key);
-                        Console.WriteLine(element.Value);
-                        Console.WriteLine("---------");
+                        oid = inputParams["oid"].Replace("sha256:", ""),
+                        size = long.Parse(inputParams["size"])
+                    };
+
+                    var batchResult =
+                        await
+                            SolGitLFS.Apis.HTTPApi.BatchDownloadQueryAsync("https://github.com/teamnop/LFSTestRepo.git",
+                                new List<SolGitLFS.Entities.LFSPointer>() {lfsObject});
+
+                    var lfsBatchResult = batchResult.objects.FirstOrDefault();
+                    if (lfsBatchResult == null)
+                    {
+                        throw new Exception("LFS Batch 응답이 올바르지 않습니다.");
                     }
 
+                    var LfsDownloadResult =
+                        await SolGitLFS.Apis.HTTPApi.DownloadAsync(lfsBatchResult.actions.download.href,
+                            lfsBatchResult.actions.download.header);
+
+                    if (LfsDownloadResult == null)
+                    {
+                        throw new Exception("LFS Download 결과가 올바르지 않습니다");
+                    }
+
+                    using (var stdout = Console.OpenStandardOutput())
+                    {
+                        stdout.Write(LfsDownloadResult, 0, LfsDownloadResult.Length);
+                    }
                 }
                 else
                 {
