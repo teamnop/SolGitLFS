@@ -22,7 +22,10 @@ namespace GitLFSSharp
                 command = commandHolder.GetCommand(args[0]);
             }
 
-            return command.Run(args.Skip(1).ToArray());
+            var commandTask = command.Run(args.Skip(1).ToArray());
+            commandTask.Wait();
+
+            return commandTask.Result;
         }
     }
 }

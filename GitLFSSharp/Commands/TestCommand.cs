@@ -8,7 +8,7 @@ namespace GitLFSSharp.Commands
 {
     class TestCommand : ICommand
     {
-        public int Run(string[] args)
+        public Task<int> Run(string[] args)
         {
             List<SolGitLFS.Entities.LFSPointer> lfsObjects = new List<SolGitLFS.Entities.LFSPointer>();
             lfsObjects.Add(new SolGitLFS.Entities.LFSPointer()
@@ -26,7 +26,7 @@ namespace GitLFSSharp.Commands
 
             Console.WriteLine(downloadTask.Result.Length);
 
-            return 0;
+            return Task.FromResult<int>(0);
         }
     }
 }

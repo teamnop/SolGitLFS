@@ -9,7 +9,7 @@ namespace GitLFSSharp.Commands
 {
     class SmudgeCommand : ICommand
     {
-        public int Run(string[] args)
+        public async Task<int> Run(string[] args)
         {
             // 우선 "version " 으로 시작 되는지 체크한다
             // 위의 문자열로 시작 하지 않는다면 그냥 무시하고 그대로 stdout으로 출력한다

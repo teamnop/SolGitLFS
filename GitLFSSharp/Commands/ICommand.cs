@@ -8,6 +8,6 @@ namespace GitLFSSharp.Commands
 {
     interface ICommand
     {
-        int Run(string[] args);
+        Task<int> Run(string[] args);
     }
 }
