@@ -45,12 +45,12 @@ namespace SolGitLFS.Apis
                 request.Content = new StringContent(requestJson, Encoding.UTF8, "application/vnd.git-lfs+json");
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.git-lfs+json"));
 
-                Console.WriteLine(requestJson);
+                System.Diagnostics.Trace.WriteLine(requestJson);
                 var response = await client.SendAsync(request);
 
                 var responseText = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine(responseText);
+                System.Diagnostics.Trace.WriteLine(responseText);
 
                 // TODO: 여기서 올바른 내용인지 검사해야함
                 var responseObj = Jil.JSON.Deserialize<Structs.HttpBatchResponse>(responseText, Jil.Options.IncludeInherited);
