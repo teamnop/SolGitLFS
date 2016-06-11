@@ -95,9 +95,11 @@ namespace GitLFSSharp.Commands
                         size = long.Parse(inputParams["size"])
                     };
 
+                    var remoteUrl = SolGitLFS.Utils.GitRepo.GetRemotePath();
+
                     var batchResult =
                         await
-                            SolGitLFS.Apis.HTTPApi.BatchDownloadQueryAsync("https://github.com/teamnop/LFSTestRepo.git",
+                            SolGitLFS.Apis.HTTPApi.BatchDownloadQueryAsync(remoteUrl,
                                 new List<SolGitLFS.Entities.LFSPointer>() {lfsObject});
 
                     var lfsBatchResult = batchResult.objects.FirstOrDefault();
