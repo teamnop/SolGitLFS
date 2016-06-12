@@ -20,6 +20,7 @@ namespace GitLFSSharp.Commands
         {
             CommandDict.Add("test", new TestCommand());
             CommandDict.Add("smudge", new SmudgeCommand());
+            CommandDict.Add("clean", new CleanCommand());
         }
 
         public ICommand GetCommand(string command = null)
