@@ -125,7 +125,7 @@ namespace GitLFSSharp.Commands
                 else
                 {
                     // redirect stdin to stdout
-                    byte[] buffer = new byte[8196];
+                    byte[] buffer = new byte[65536];
 
                     using (var stdout = Console.OpenStandardOutput())
                     {
