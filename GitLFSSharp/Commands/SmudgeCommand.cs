@@ -89,9 +89,10 @@ namespace GitLFSSharp.Commands
                     }
 
                     // 파일 파싱이 끝났으면 실제파일을 받아와서 stdout으로 보내준다
+                    var realOid = inputParams["oid"].Replace("sha256:", "");
                     var lfsObject = new SolGitLFS.Entities.LFSPointer()
                     {
-                        oid = inputParams["oid"].Replace("sha256:", ""),
+                        oid = realOid,
                         size = long.Parse(inputParams["size"])
                     };
 
@@ -100,7 +101,7 @@ namespace GitLFSSharp.Commands
                     var batchResult =
                         await
                             SolGitLFS.Apis.HTTPApi.BatchDownloadQueryAsync(remoteUrl,
-                                new List<SolGitLFS.Entities.LFSPointer>() {lfsObject});
+                                new List<SolGitLFS.Entities.LFSPointer>() { lfsObject });
 
                     var lfsBatchResult = batchResult.objects.FirstOrDefault();
                     if (lfsBatchResult == null)
@@ -114,7 +115,13 @@ namespace GitLFSSharp.Commands
 
                     if (LfsDownloadResult == null)
                     {
-                        throw new Exception("LFS Download 결과가 올바르지 않습니다");
+                        throw new Exception("LFS Download 결과가 올바르지 않습니다.");
+                    }
+
+                    var hash = SolGitLFS.Utils.SHA256.CalcHash(LfsDownloadResult);
+                    if (hash.Equals(realOid) == false)
+                    {
+                        throw new Exception("LFS Download 결과와 Hash값이 일치하지 않습니다.");
                     }
 
                     using (var stdout = Console.OpenStandardOutput())
