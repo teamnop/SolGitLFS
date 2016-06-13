@@ -38,5 +38,15 @@ namespace SolGitLFS.Utils
                 return BitConverter.ToString(hash).Replace("-", String.Empty).ToLower();
             }
         }
+
+        /// <summary>
+        /// ByteArray를 Seralize하여 hash string으로 변경
+        /// </summary>
+        /// <param name="hash">변경할 ByteArray</param>
+        /// <returns>hash string</returns>
+        public static string ByteArrayToHash(byte[] hash)
+        {
+            return BitConverter.ToString(hash).Replace("-", String.Empty).ToLower();
+        }
     }
 }
