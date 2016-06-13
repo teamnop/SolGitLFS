@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,26 +16,37 @@ namespace GitLFSSharp.Commands
             resultDict.Add(new KeyValuePair<string, string>("version", "https://git-lfs.github.com/spec/v1"));
 
             byte[] buffer = new byte[65536];
+            byte[] hashArray = null;
+
             using (var stdin = Console.OpenStandardInput())
             {
-                using (MemoryStream ms = new MemoryStream())
+                int size = 0;
+                using (var sha256 = SHA256Managed.Create())
                 {
-                    int read;
-
-                    while ((read = stdin.Read(buffer, 0, buffer.Length)) > 0)
+                    while (true)
                     {
-                        ms.Write(buffer, 0, read);
+                        int readBytes = stdin.Read(buffer, 0, buffer.Length);
+
+                        size += readBytes;
+                        if (readBytes > 0)
+                        {
+                            sha256.TransformBlock(buffer, 0, readBytes, null, 0);
+                        }
+                        else
+                        {
+                            sha256.TransformFinalBlock(buffer, 0, readBytes);
+                            hashArray = sha256.Hash;
+                            break;
+                        }
                     }
 
-                    var data = ms.ToArray();
-                    var hash = SolGitLFS.Utils.SHA256.CalcHash(data);
-
+                    var hash = SolGitLFS.Utils.SHA256.ByteArrayToHash(hashArray);
                     resultDict.Add(new KeyValuePair<string, string>("oid", "sha256:" + hash));
-                    resultDict.Add(new KeyValuePair<string, string>("size", data.Length.ToString()));
+                    resultDict.Add(new KeyValuePair<string, string>("size", size.ToString()));
                 }
             }
 
-            foreach(var element in resultDict)
+            foreach (var element in resultDict)
             {
                 Console.Write(element.Key);
                 Console.Write(" ");
