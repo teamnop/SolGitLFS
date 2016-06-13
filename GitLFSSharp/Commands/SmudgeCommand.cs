@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -118,15 +119,36 @@ namespace GitLFSSharp.Commands
                         throw new Exception("LFS Download 결과가 올바르지 않습니다.");
                     }
 
-                    var hash = SolGitLFS.Utils.SHA256.CalcHash(LfsDownloadResult);
-                    if (hash.Equals(realOid) == false)
-                    {
-                        throw new Exception("LFS Download 결과와 Hash값이 일치하지 않습니다.");
-                    }
-
                     using (var stdout = Console.OpenStandardOutput())
                     {
-                        stdout.Write(LfsDownloadResult, 0, LfsDownloadResult.Length);
+                        using (var sha256 = SHA256Managed.Create())
+                        {
+                            int size = 0;
+                            while (true)
+                            {
+                                int readBytes = LfsDownloadResult.Read(buffer, 0, buffer.Length);
+
+                                size += readBytes;
+
+                                if (readBytes > 0)
+                                {
+                                    sha256.TransformBlock(buffer, 0, readBytes, null, 0);
+                                }
+                                else
+                                {
+                                    sha256.TransformFinalBlock(buffer, 0, readBytes);
+
+                                    var hash = SolGitLFS.Utils.SHA256.ByteArrayToHash(sha256.Hash);
+                                    if (hash.Equals(realOid) == false)
+                                    {
+                                        throw new Exception("LFS Download 결과와 Hash값이 일치하지 않습니다.");
+                                    }
+                                    break;
+                                }
+
+                                stdout.Write(buffer, 0, readBytes);
+                            }
+                        }
                     }
                 }
                 else
