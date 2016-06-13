@@ -65,8 +65,8 @@ namespace SolGitLFS.Apis
         /// </summary>
         /// <param name="url">객체 위치 ( Batch 명령으로 가지고 온 URL )</param>
         /// <param name="headers">요청 헤더</param>
-        /// <returns>byte[]로 이루어진 LFS 파일의 데이터</returns>
-        public static async Task<byte[]> DownloadAsync(string url, Dictionary<string, string> headers = null)
+        /// <returns>LFS 데이터 Stream</returns>
+        public static async Task<System.IO.Stream> DownloadAsync(string url, Dictionary<string, string> headers = null)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -87,7 +87,7 @@ namespace SolGitLFS.Apis
 
                 var response = await client.GetAsync(url);
 
-                return await response.Content.ReadAsByteArrayAsync();
+                return await response.Content.ReadAsStreamAsync();
             }
         }
     }
