@@ -98,5 +98,15 @@ namespace SolGitLFS.Utils
 
             return remoteSection["url"];
         }
+
+        /// <summary>
+        /// .git 폴더에서 LFS Object의 경로를 만들어서 반환해준다.
+        /// </summary>
+        /// <param name="oid">LFS Object의 oid</param>
+        /// <returns>LFS Object가 위치할 경로</returns>
+        public static string CreateLFSObjectPath(string oid)
+        {
+            return string.Format("lfs/objects/" + oid.Substring(0, 2) + "/" + oid.Substring(2, 2) + "/" + oid);
+        }
     }
 }
