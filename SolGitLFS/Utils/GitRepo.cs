@@ -104,9 +104,16 @@ namespace SolGitLFS.Utils
         /// </summary>
         /// <param name="oid">LFS Object의 oid</param>
         /// <returns>LFS Object가 위치할 경로</returns>
-        public static string CreateLFSObjectPath(string oid)
+        public static string CreateLFSObjectPath(string oid, bool withOid = false)
         {
-            return string.Format("lfs/objects/" + oid.Substring(0, 2) + "/" + oid.Substring(2, 2) + "/" + oid);
+            if (withOid == false)
+            {
+                return string.Format("lfs/objects/{0}/{1}", oid.Substring(0, 2), oid.Substring(2, 2));
+            }
+            else
+            {
+                return string.Format("lfs/objects/{0}/{1}/{2}",oid.Substring(0, 2), oid.Substring(2, 2), oid);
+            }
         }
     }
 }
