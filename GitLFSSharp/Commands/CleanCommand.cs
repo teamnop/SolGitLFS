@@ -10,7 +10,7 @@ namespace GitLFSSharp.Commands
 {
     class CleanCommand : ICommand
     {
-        public async Task<int> Run(string[] args)
+        public Task<int> Run(string[] args)
         {
             var resultDict = new List<KeyValuePair<string, string>>();
             resultDict.Add(new KeyValuePair<string, string>("version", SolGitLFS.Define.LFSVersion));
@@ -86,7 +86,7 @@ namespace GitLFSSharp.Commands
                 Console.Write("\n");
             }
 
-            return 0;
+            return Task.FromResult<int>(0);
         }
     }
 }
