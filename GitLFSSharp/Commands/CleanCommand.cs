@@ -13,7 +13,7 @@ namespace GitLFSSharp.Commands
         public async Task<int> Run(string[] args)
         {
             var resultDict = new List<KeyValuePair<string, string>>();
-            resultDict.Add(new KeyValuePair<string, string>("version", "https://git-lfs.github.com/spec/v1"));
+            resultDict.Add(new KeyValuePair<string, string>("version", SolGitLFS.Define.LFSVersion));
 
             byte[] buffer = new byte[65536];
             byte[] hashArray = null;
@@ -24,7 +24,7 @@ namespace GitLFSSharp.Commands
                 throw new Exception("Git Repo를 찾지 못하였습니다");
             }
 
-            var tmpPath = "lfs\\tmp\\objects";
+            var tmpPath = SolGitLFS.Define.LFSTmpObjectFolder;
             Directory.CreateDirectory(Path.Combine(root, tmpPath));
 
             var tmpName = DateTime.Now.Ticks;
@@ -75,7 +75,6 @@ namespace GitLFSSharp.Commands
                     
                     resultDict.Add(new KeyValuePair<string, string>("oid", "sha256:" + oid));
                     resultDict.Add(new KeyValuePair<string, string>("size", size.ToString()));
-
                 }
             }
 
